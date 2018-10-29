@@ -6,32 +6,32 @@ import 'package:http/browser_client.dart';
 import 'package:data_model/data_model.dart';
 import 'package:rest_api_client/rest_api_client.dart';
 
-/// Идентификатор пользователя
+/// User identifier
 class UserId extends ObjectId {
   UserId(id) : super(id);
 }
 
-/// Пользователь
+/// User
 class User extends Model {
-  /// Имя пользователя
+  /// Username
   String userName;
 
-  /// Фамилия
+  /// Last name
   String lastName;
 
-  /// Имя
+  /// First name
   String firstName;
 
-  /// Полное имя
+  /// Full name
   String get fullName => '$firstName $lastName';
 
-  /// Дата рождения
+  /// Date of birth
   DateTime birthDate;
 
-  /// Создает пользователя
+  /// Creates user
   User({UserId id, this.userName, this.lastName, this.firstName, this.birthDate}): super(id);
 
-  /// Создает пользователя из JSON-данных
+  /// Creates user from JSON-data
   User.fromJson(Map<String, dynamic> json)
       : userName = json['username'],
         lastName = json['lastname'],
@@ -48,19 +48,19 @@ class User extends Model {
     })..removeWhere((key, value) => value == null);
 }
 
-/// Ресурс Users
+/// Users resource client
 ///
-/// Оперирует с объектами [User].
-/// В дополнение к стандартным CRUD-методам реализует методы:
-/// * `login` - вход в систему
-/// * `logout` - выход из системы
+/// Operates with [User]-objects.
+/// 
+/// Implements methods:
+/// * `login` - enter into system
+/// * `logout` - exit from system
 class Users extends ResourceClient<User> {
   Users(ApiClient apiClient)
       : super('/users', apiClient);
 
   User createObject(Map<String, dynamic> json) => User.fromJson(json);
 
-  /// Осуществляет вход в систему
   Future<User> login(String username, String password) async {
     final response = await apiClient.send(ApiRequest(
         method: RequestMethod.post,
@@ -72,7 +72,6 @@ class Users extends ResourceClient<User> {
     return User.fromJson(response.body);
   }
 
-  /// Осуществляет выход из системы
   Future logout() async {
     final response = await apiClient.send(ApiRequest(
         method: RequestMethod.post, resourcePath: '$resourcePath/logout'));
@@ -98,7 +97,7 @@ main() async {
   try {
     currentUser = await users.login('username', 'password');
   } catch (e) {
-    // Здесь обрабатываем неудачный логин. Причина в e.message.
+    // Here bad failed login should be processed. The reason is in e.message.
   }
   print('Пользователь ${currentUser.fullName} успешно аутентифицировался');
 
@@ -112,7 +111,7 @@ main() async {
   try {
     createdUser = await users.create(newUser);
   } catch (e) {
-    // Обработка ошибки создания пользователя
+    // Handle create user exception
   }
 
   print('Пользователь ${createdUser.fullName} успешно создан');
@@ -121,14 +120,14 @@ main() async {
   try {
     bobs = await users.read({'firstname': 'Bob'});
   } catch (e) {
-    // Обработка ошибки получения данных
+    // Handle get data exception
   }
   bobs.forEach((bob) {
-    // Выполняем что-то для пользователей с именем Bob
+    // Do somethin with users having name Bob
     print('${bob.fullName} - ${bob.birthDate}');
   });
 }
 
 saveToken(String tiken) {
-  // Сохранение jwt-токена
+  // Save JWT
 }
