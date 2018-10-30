@@ -1,7 +1,7 @@
 @TestOn('vm')
 import 'package:meta/meta.dart';
 import 'package:test/test.dart';
-import 'package:http/http.dart';
+import 'package:http/io_client.dart';
 
 import 'package:data_model/data_model.dart';
 import 'package:rest_api_client/rest_api_client.dart';
