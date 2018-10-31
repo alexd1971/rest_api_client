@@ -67,13 +67,13 @@ abstract class ResourceClient<T extends Model> {
   /// into [Lsit]<T>
   Future read(dynamic obj, {Map<String, String> headers = const {}}) async {
     String path;
-    Map<String, String> queryParameters;
+    Map<String, dynamic> queryParameters;
 
     if (obj is ObjectId) {
       path = '$resourcePath/$obj';
     } else if (obj is Map) {
       path = resourcePath;
-      queryParameters = Map<String, String>.from(obj);
+      queryParameters = Map<String, dynamic>.from(obj);
     } else {
       throw (ArgumentError.value(obj, 'obj',
           'Read criteria must be an ObjectId or Map of query parameters'));
@@ -134,13 +134,13 @@ abstract class ResourceClient<T extends Model> {
   /// into [Lsit]<T>
   Future delete(dynamic obj, {Map<String, String> headers = const {}}) async {
     String path;
-    Map<String, String> queryParameters;
+    Map<String, dynamic> queryParameters;
 
     if (obj is ObjectId) {
       path = '$resourcePath/$obj';
     } else if (obj is Map) {
       path = resourcePath;
-      queryParameters = Map<String, String>.from(obj);
+      queryParameters = Map<String, dynamic>.from(obj);
     } else {
       throw (ArgumentError.value(obj, 'obj',
           'Delete criteria must be an ObjectId or Map of query parameters'));

@@ -15,10 +15,10 @@ class ApiRequest {
   /// Path to the resource
   final String resourcePath;
 
-  Map<String, String> _queryParameters;
+  Map<String, dynamic> _queryParameters;
 
   /// Parameters of query
-  Map<String, String> get queryParameters => _queryParameters;
+  Map<String, dynamic> get queryParameters => _queryParameters;
 
   Map<String, String> _headers;
 
@@ -53,7 +53,7 @@ class ApiRequest {
   ApiRequest(
       {this.method = RequestMethod.get,
       this.resourcePath = '/',
-      Map<String, String> queryParameters,
+      Map<String, dynamic> queryParameters,
       Map<String, String> headers = const {},
       this.body}) {
     _headers = Map.unmodifiable(headers);
