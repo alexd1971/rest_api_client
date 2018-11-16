@@ -159,15 +159,15 @@ abstract class ResourceClient<T extends Model> {
       throw (HttpException('${response.reasonPhrase}\n${response.body}'));
     }
     if (response.body is Map) {
-      return createObject(response.body);
+      return createModel(response.body);
     } else if (response.body is List) {
-      return List<T>.from(response.body.map((json) => createObject(json)));
+      return List<T>.from(response.body.map((json) => createModel(json)));
     } else {
       throw FormatException('Invalid http response format');
     }
   }
 
-  /// Creates object of type `T`
+  /// Creates model of type `T`
   @protected
-  T createObject(Map<String, dynamic> json);
+  T createModel(Map<String, dynamic> json);
 }

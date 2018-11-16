@@ -19,145 +19,144 @@
 ///
 /// ## Пример использования
 ///
-///     import 'dart:async';
-///     import 'dart:io';
+///        import 'dart:async';
+///        import 'dart:io';
 ///
-///     import 'package:http/browser_client.dart';
+///        import 'package:http/browser_client.dart';
 ///
-///     import 'package:rest_resource/rest_resource.dart';
+///        import 'package:data_model/data_model.dart';
+///        import 'package:rest_api_client/rest_api_client.dart';
 ///
-///     /// Идентификатор пользователя
-///     class UserId extends ObjectId {
-///       UserId(id) : super(id);
-///     }
+///        /// User identifier
+///        class UserId extends ObjectId {
+///          UserId(id) : super(id);
+///        }
 ///
-///     /// Пользователь
-///     class User implements JsonEncodable {
-///       UserId _id;
+///        /// User
+///        class User extends Model<UserId> {
 ///
-///       /// Идентификтор
-///       UserId get id => _id;
+///          /// User's identifier
+///          UserId id;
 ///
-///       /// Имя пользователя
-///       String userName;
+///          /// Username
+///          String userName;
 ///
-///       /// Фамилия
-///       String lastName;
+///          /// Last name
+///          String lastName;
 ///
-///       /// Имя
-///       String firstName;
+///          /// First name
+///          String firstName;
 ///
-///       /// Полное имя
-///       String get fullName => '$firstName $lastName';
+///          /// Full name
+///          String get fullName => '$firstName $lastName';
 ///
-///       /// Дата рождения
-///       DateTime birthDate;
+///          /// Date of birth
+///          DateTime birthDate;
 ///
-///       /// Создает пользователя
-///       User({this.userName, this.lastName, this.firstName, this.birthDate});
+///          /// Creates user
+///          User({this.id, this.userName, this.lastName, this.firstName, this.birthDate});
 ///
-///       /// Создает пользователя из JSON-данных
-///       User.fromJson(Map<String, dynamic> json)
-///           : _id = json['id'],
-///             userName = json['username'],
-///             lastName = json['lastname'],
-///             firstName = json['firstname'],
-///             birthDate = DateTime.parse(json['birth_date']);
+///          /// Creates user from JSON-data
+///          User.fromJson(Map<String, dynamic> json)
+///              : id = UserId(json['id']),
+///                userName = json['username'],
+///                lastName = json['lastname'],
+///                firstName = json['firstname'],
+///                birthDate = DateTime.parse(json['birth_date']);
 ///
-///       dynamic toJson() {
-///         Map<String, dynamic> result = {
-///           'id': _id,
-///           'username': userName,
-///           'lastname': lastName,
-///           'firstname': firstName,
-///           'birth_date': birthDate
-///         };
-///         // Перед возвратом результата полезно удалить все пустые атрибуты:
-///         // * уменьшается трафик
-///         // * не захламляется база
-///         // * легко реализуется частичное обновление данных объекта
-///         return result..removeWhere((key, value) => value == null);
-///       }
-///     }
+///          @override
+///          Map<String, dynamic> get json => {
+///              'id': id.json,
+///              'username': userName,
+///              'lastname': lastName,
+///              'firstname': firstName,
+///              'birth_date': birthDate
+///            }..removeWhere((key, value) => value == null);
+///        }
 ///
-///     /// Ресурс Users
-///     ///
-///     /// Оперирует с объектами [User].
-///     /// В дополнение к стандартным CRUD-методам реализует методы:
-///     /// * `login` - вход в систему
-///     /// * `logout` - выход из системы
-///     class Users extends RestResource<User> {
-///       Users(RestClient apiClient)
-///           : super(resourcePath: '/users', apiClient: apiClient);
+///        /// Users resource client
+///        ///
+///        /// Operates with [User]-objects.
+///        /// 
+///        /// Implements methods:
+///        /// * `login` - enter into system
+///        /// * `logout` - exit from system
+///        class Users extends ResourceClient<User> {
+///          Users(ApiClient apiClient)
+///              : super('/users', apiClient);
 ///
-///       User createObject(Map<String, dynamic> json) => User.fromJson(json);
+///          User createModel(Map<String, dynamic> json) => User.fromJson(json);
 ///
-///       /// Осуществляет вход в систему
-///       Future<User> login(String username, String password) async {
-///         final response = await apiClient.post(
-///             resourcePath: '$resourcePath/login',
-///             body: {'username': username, 'password': password});
-///         if (response.statusCode != HttpStatus.ok) {
-///           throw (response.reasonPhrase);
-///         }
-///         return User.fromJson(response.body);
-///       }
+///          Future<User> login(String username, String password) async {
+///            final response = await apiClient.send(ApiRequest(
+///                method: RequestMethod.post,
+///                resourcePath: '$resourcePath/login',
+///                body: {'username': username, 'password': password}));
+///            if (response.statusCode != HttpStatus.ok) {
+///              throw (response.reasonPhrase);
+///            }
+///            return User.fromJson(response.body);
+///          }
 ///
-///       /// Осуществляет выход из системы
-///       Future logout() async {
-///         final response = await apiClient.post(resourcePath: '$resourcePath/logout');
-///         if (response.statusCode != HttpStatus.ok) {
-///           throw (response.reasonPhrase);
-///         }
-///       }
-///     }
+///          Future logout() async {
+///            final response = await apiClient.send(ApiRequest(
+///                method: RequestMethod.post, resourcePath: '$resourcePath/logout'));
+///            if (response.statusCode != HttpStatus.ok) {
+///              throw (response.reasonPhrase);
+///            }
+///          }
+///        }
 ///
-///     main() async {
-///       final apiClient = RestClient(Uri.http('api.examle.com', '/'), BrowserClient(),
-///         onBeforeRequest: (request) => request.change(
-///             headers: Map.from(request.headers)
-///               ..addAll({'X-Requested-With': 'XMLHttpRequest'})),
-///         onAfterResponse: (response) {
-///           saveToken(response.headers[HttpHeaders.authorizationHeader]);
-///           return response;
-///         });
+///        main() async {
+///          final apiClient = ApiClient(Uri.http('api.examle.com', '/'), BrowserClient(),
+///              onBeforeRequest: (request) => request.change(
+///                  headers: Map.from(request.headers)
+///                    ..addAll({'X-Requested-With': 'XMLHttpRequest'})),
+///              onAfterResponse: (response) {
+///                saveToken(response.headers[HttpHeaders.authorizationHeader]);
+///                return response;
+///              });
 ///
-///       final users = Users(apiClient);
+///          final users = Users(apiClient);
 ///
-///       User currentUser;
-///       try {
-///         currentUser = await users.login('username', 'password');
-///       } catch (e) {
-///         // Здесь обрабатываем неудачный логин. Причина в e.message.
-///       }
-///       print('Пользователь ${currentUser.fullName} успешно аутентифицировался');
+///          User currentUser;
+///          try {
+///            currentUser = await users.login('username', 'password');
+///          } catch (e) {
+///            // Here bad failed login should be processed. The reason is in e.message.
+///          }
+///          print('Пользователь ${currentUser.fullName} успешно аутентифицировался');
 ///
-///       final newUser = User(
-///           userName: 'newuser',
-///           firstName: 'Bob',
-///           lastName: 'Martin',
-///           birthDate: DateTime(1952));
+///          final newUser = User(
+///              userName: 'newuser',
+///              firstName: 'Bob',
+///              lastName: 'Martin',
+///              birthDate: DateTime(1952));
 ///
-///       User createdUser;
-///       try {
-///         createdUser = await users.create(newUser);
-///       } catch (e) {
-///         // Обработка ошибки создания пользователя
-///       }
+///          User createdUser;
+///          try {
+///            createdUser = await users.create(newUser);
+///          } catch (e) {
+///            // Handle create user exception
+///          }
 ///
-///       print('Пользователь ${createdUser.fullName} успешно создан');
+///          print('Пользователь ${createdUser.fullName} успешно создан');
 ///
-///       List<User> bobs;
-///       try {
-///         bobs = await users.read({'firstname': 'Bob'});
-///       } catch (e) {
-///         // Обработка ошибки получения данных
-///       }
-///       bobs.forEach((bob) {
-///         // Выполняем что-то для пользователей с именем Bob
-///         print('${bob.fullName} - ${bob.birthDate}');
-///       });
-///     }
+///          List<User> bobs;
+///          try {
+///            bobs = await users.read({'firstname': 'Bob'});
+///          } catch (e) {
+///            // Handle get data exception
+///          }
+///          bobs.forEach((bob) {
+///            // Do somethin with users having name Bob
+///            print('${bob.fullName} - ${bob.birthDate}');
+///          });
+///        }
+///
+///        saveToken(String tiken) {
+///          // Save JWT
+///        }
 library rest_resource;
 
 export 'src/api_request.dart';

@@ -12,7 +12,11 @@ class UserId extends ObjectId {
 }
 
 /// User
-class User extends Model {
+class User extends Model<UserId> {
+
+  /// User's identifier
+  UserId id;
+
   /// Username
   String userName;
 
@@ -29,23 +33,24 @@ class User extends Model {
   DateTime birthDate;
 
   /// Creates user
-  User({UserId id, this.userName, this.lastName, this.firstName, this.birthDate}): super(id);
+  User({this.id, this.userName, this.lastName, this.firstName, this.birthDate});
 
   /// Creates user from JSON-data
   User.fromJson(Map<String, dynamic> json)
-      : userName = json['username'],
+      : id = UserId(json['id']),
+        userName = json['username'],
         lastName = json['lastname'],
         firstName = json['firstname'],
-        birthDate = DateTime.parse(json['birth_date']),
-        super(json['id']);
+        birthDate = DateTime.parse(json['birth_date']);
 
   @override
-  Map<String, dynamic> get json => super.json..addAll({
+  Map<String, dynamic> get json => {
+      'id': id.json,
       'username': userName,
       'lastname': lastName,
       'firstname': firstName,
       'birth_date': birthDate
-    })..removeWhere((key, value) => value == null);
+    }..removeWhere((key, value) => value == null);
 }
 
 /// Users resource client
@@ -59,7 +64,7 @@ class Users extends ResourceClient<User> {
   Users(ApiClient apiClient)
       : super('/users', apiClient);
 
-  User createObject(Map<String, dynamic> json) => User.fromJson(json);
+  User createModel(Map<String, dynamic> json) => User.fromJson(json);
 
   Future<User> login(String username, String password) async {
     final response = await apiClient.send(ApiRequest(

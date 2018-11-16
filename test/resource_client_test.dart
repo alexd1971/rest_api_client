@@ -10,7 +10,7 @@ class TestResource extends ResourceClient<TestResourceObject> {
   TestResource({@required ApiClient apiClient})
       : super('echo-resource', apiClient);
 
-  TestResourceObject createObject(Map<String, dynamic> json) =>
+  TestResourceObject createModel(Map<String, dynamic> json) =>
       TestResourceObject.fromJson(json);
 }
 
