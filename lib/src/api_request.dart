@@ -3,13 +3,13 @@ import 'request_method.dart';
 /// REST API request
 class ApiRequest {
   /// Method
-  /// 
+  ///
   /// [ApiRequest] supports the following methods:
   /// * GET     get data
   /// * POST    create new resource object
   /// * PUT     replace object data
   /// * PATCH   update object data
-  /// * DELETE  delete object 
+  /// * DELETE  delete object
   final RequestMethod method;
 
   /// Path to the resource
@@ -29,9 +29,9 @@ class ApiRequest {
   final dynamic body;
 
   /// Creates new request
-  /// 
+  ///
   /// `method` - request method
-  /// 
+  ///
   /// `resourcePath` - path to the resource
   ///
   /// `queryParameters` - additional query parameters
@@ -62,7 +62,7 @@ class ApiRequest {
   }
 
   /// Changes request
-  /// 
+  ///
   /// Returns new request with changed data
   ApiRequest change(
           {RequestMethod method,

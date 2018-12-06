@@ -3,6 +3,6 @@ dart:
 - "2.0.0"
 dart_task:
 - dartanalyzer: --fatal-warnings lib
-- dartfmt
+- dartfmt 
 - test: --platform vm
 - test: --platform chrome

@@ -193,7 +193,7 @@ class RestClientTests {
 }
 
 class EncodableObjectId extends ObjectId {
-  EncodableObjectId._(id): super(id);
+  EncodableObjectId._(id) : super(id);
   factory EncodableObjectId(id) {
     if (id == null) return null;
     return EncodableObjectId._(id);

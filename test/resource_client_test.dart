@@ -59,8 +59,7 @@ void main() {
 
   test('get object', () async {
     final object = await testResource.read(TestResourceObjectId(1));
-    expect(object.json,
-        TestResourceObject.fromJson({'id': 1}).json);
+    expect(object.json, TestResourceObject.fromJson({'id': 1}).json);
   });
 
   test('get objects by query', () async {

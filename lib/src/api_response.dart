@@ -23,7 +23,7 @@ class ApiResponse {
   }
 
   /// Changes response
-  /// 
+  ///
   /// Returns new [ApiResponse] with changed paraameters
   ApiResponse change(
           {int statusCode,

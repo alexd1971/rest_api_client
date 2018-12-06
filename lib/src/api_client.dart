@@ -33,7 +33,7 @@ class ApiClient {
   /// This callback is usually used to add somthing to every api request.
   ///
   /// [onAfterResponse] callback, which takes as argument [ApiResponse] and returns [ApiResponse].
-  /// This callback is usually used to get some additional info from response data 
+  /// This callback is usually used to get some additional info from response data
   ApiClient(Uri apiUri, http.Client httpClient,
       {OnBeforeRequest onBeforeRequest, OnAfterResponse onAfterResponse})
       : _httpClient = httpClient,

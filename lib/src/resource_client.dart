@@ -28,12 +28,12 @@ abstract class ResourceClient<T extends Model> {
   final ApiClient apiClient;
 
   /// Creates new resource
-  /// 
+  ///
   /// [resourcePath] путь к ресурсу на API-сервере.
-  /// 
+  ///
   /// If path contains leading slash (`/resource`) it will be interpreted as absolute path
   /// from root of server. In this case the path set in [apiClient] will be overridden.
-  /// 
+  ///
   /// If path is without leading slash `resource`, then this path will be added to the path
   /// set in [apiClient].
   ResourceClient(this.resourcePath, this.apiClient) {

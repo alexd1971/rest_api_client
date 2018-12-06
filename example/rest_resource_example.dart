@@ -13,7 +13,6 @@ class UserId extends ObjectId {
 
 /// User
 class User extends Model<UserId> {
-
   /// User's identifier
   UserId id;
 
@@ -45,24 +44,23 @@ class User extends Model<UserId> {
 
   @override
   Map<String, dynamic> get json => {
-      'id': id.json,
-      'username': userName,
-      'lastname': lastName,
-      'firstname': firstName,
-      'birth_date': birthDate
-    }..removeWhere((key, value) => value == null);
+        'id': id.json,
+        'username': userName,
+        'lastname': lastName,
+        'firstname': firstName,
+        'birth_date': birthDate
+      }..removeWhere((key, value) => value == null);
 }
 
 /// Users resource client
 ///
 /// Operates with [User]-objects.
-/// 
+///
 /// Implements methods:
 /// * `login` - enter into system
 /// * `logout` - exit from system
 class Users extends ResourceClient<User> {
-  Users(ApiClient apiClient)
-      : super('/users', apiClient);
+  Users(ApiClient apiClient) : super('/users', apiClient);
 
   User createModel(Map<String, dynamic> json) => User.fromJson(json);
 

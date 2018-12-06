@@ -77,7 +77,7 @@
 ///        /// Users resource client
 ///        ///
 ///        /// Operates with [User]-objects.
-///        /// 
+///        ///
 ///        /// Implements methods:
 ///        /// * `login` - enter into system
 ///        /// * `logout` - exit from system
