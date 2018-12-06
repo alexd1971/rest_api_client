@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/alexd1971/rest_api_client.svg?branch=master)](https://travis-ci.com/alexd1971/rest_api_client)
+
 # REST API Client
 
 Library of tools to create REST resource clients (web- и mobile-clients are supported)
