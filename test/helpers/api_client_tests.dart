@@ -189,6 +189,12 @@ class RestClientTests {
         }
       });
     });
+
+    test('set null URI throws', () {
+      expect(() {
+        apiClient.apiUri = null;
+      }, throwsArgumentError);
+    });
   }
 }
 

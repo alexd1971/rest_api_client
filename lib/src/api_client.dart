@@ -17,7 +17,7 @@ typedef ApiResponse OnAfterResponse(ApiResponse response);
 /// Implements method `send` to communicate with api-server
 class ApiClient {
   final http.Client _httpClient;
-  final Uri _apiUri;
+  Uri _apiUri;
   final OnBeforeRequest _onBeforeRequest;
   final OnAfterResponse _onAfterResponse;
 
@@ -42,6 +42,13 @@ class ApiClient {
         _onAfterResponse = onAfterResponse {
     if (apiUri == null) throw (ArgumentError.notNull('apiUri'));
     if (httpClient == null) throw (ArgumentError.notNull('httpClient'));
+  }
+
+  /// Base API URI
+  Uri get apiUri => _apiUri;
+  set apiUri(Uri uri) {
+    if (uri == null) throw ArgumentError.notNull('uri');
+    _apiUri = uri;
   }
 
   /// Sends the request to the API-server.
