@@ -27,6 +27,8 @@ abstract class ResourceClient<T extends Model> {
   @protected
   final ApiClient apiClient;
 
+  ApiResponse _lastResponse;
+
   /// Creates new resource
   ///
   /// [resourcePath] путь к ресурсу на API-сервере.
@@ -155,6 +157,7 @@ abstract class ResourceClient<T extends Model> {
 
   @protected
   dynamic processResponse(ApiResponse response) {
+    _lastResponse = response;
     if (response.statusCode != HttpStatus.ok) {
       throw (HttpException('${response.reasonPhrase}\n${response.body}'));
     }
@@ -166,6 +169,9 @@ abstract class ResourceClient<T extends Model> {
       throw FormatException('Invalid http response format');
     }
   }
+
+  /// Last server response data
+  ApiResponse get lastResponse => _lastResponse;
 
   /// Creates model of type `T`
   @protected

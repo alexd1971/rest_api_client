@@ -25,6 +25,7 @@ class ApiResponse {
   /// Changes response
   ///
   /// Returns new [ApiResponse] with changed paraameters
+  /// If nothing to change returns a copy of the response
   ApiResponse change(
           {int statusCode,
           String reasonPhrase,
